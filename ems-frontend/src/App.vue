@@ -1,15 +1,7 @@
-<script>
-export default {
-  name: "EMS",
-};
-</script>
-
 <script setup></script>
 
 <template>
-  <div id="ems">
-    <RouterView />
-  </div>
+  <RouterView />
 </template>
 
 <style lang="sass"></style>
