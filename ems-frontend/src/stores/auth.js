@@ -10,23 +10,9 @@ export const useAuthStore = defineStore("auth", {
   state: () => {
     return {
       token: cookie.get("bearer"),
-      passwordVerified: false,
       authError: null,
-      signupError: null,
-      justSignedUp: false,
-      newUser: null,
       verifyError: null,
       verifySuccess: null,
-      resetPassword: {
-        token: null,
-        email: null,
-        emailVerified: false,
-        success: false,
-      },
-      resetPasswordError: null,
-      tokenVerified: true,
-      changePasswordSuccess: false,
-      changePasswordError: null,
     };
   },
   getters: {
@@ -36,20 +22,26 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     // sign in methods
-    async verifyPassword({ username, password }) {
+    async verifyPassword({ email, password }) {
       try {
-        const response = await apiAuth.post("/auth/verify_password", {
-          username,
+        const response = await apiAuth.post("/auth/adminlogin", {
+          email,
           password,
         });
-        this.tokenOTP = response.data.token;
-        this.passwordVerified = true;
+        // console.log(response, "response");
+
+        if (response.data.loginStatus) {
+          this.token = response.data.token;
+          cookie.set("bearer", response.data.token);
+          router.push("/dashboard");
+        } else {
+          this.authError = response.data.Error;
+          setTimeout(() => {
+            this.authError = null;
+          }, 3000);
+        }
       } catch (error) {
-        this.tokenOTP = null;
-        this.authError = error.response.data.msg;
-        setTimeout(() => {
-          this.authError = null;
-        }, 3000);
+        console.log(error);
       }
     },
 

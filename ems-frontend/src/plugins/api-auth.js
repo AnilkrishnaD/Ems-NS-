@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiAuth = axios.create({
-  baseURL: "https://staging.coachingbeyond.in",
+  baseURL: "http://localhost:3000",
 });
 
 export default apiAuth;

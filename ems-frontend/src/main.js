@@ -29,7 +29,7 @@ app.use(router);
 app.use(createPinia());
 app.use(PrimeVue, { ripple: true });
 
-app.component("UiButton", Button);
+app.component("Button", Button);
 app.component("InputText", InputText);
 app.component("InputTextarea", Textarea);
 

@@ -19,7 +19,7 @@ router.post("/adminlogin", (req, res) => {
         { expiresIn: "1d" }
       );
       res.cookie("token", token);
-      return res.json({ loginStatus: true });
+      return res.json({ loginStatus: true, token: token, email: email });
     } else {
       return res.json({ loginStatus: false, Error: "wrong email or password" });
     }

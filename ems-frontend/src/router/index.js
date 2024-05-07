@@ -16,6 +16,24 @@ const router = createRouter({
       path: "/dashboard",
       name: "dashboard",
       component: () => import("../pages/DashboardPage.vue"),
+
+      children: [
+        {
+          path: "/dashboard/employees",
+          name: "dashboard-employees",
+          component: () => import("../pages/admin/Employees.vue"),
+        },
+        {
+          path: "/dashboard/category",
+          name: "dashboard-category",
+          component: () => import("../pages/admin/Category.vue"),
+        },
+        {
+          path: "/dashboard/profile",
+          name: "dashboard-profile",
+          component: () => import("../pages/admin/Profile.vue"),
+        },
+      ],
     },
     {
       path: "/",
@@ -27,8 +45,8 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const authStore = useAuthStore();
-  // const isAuthenticated = authStore.token;
-  const isAuthenticated = true;
+  const isAuthenticated = authStore.token;
+  // const isAuthenticated = true;
   const publicUrls = ["login"];
 
   if (!isAuthenticated && !publicUrls.includes(to.name)) {
