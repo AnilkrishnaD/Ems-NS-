@@ -18,10 +18,7 @@ function login(event) {
 
   authStore.verifyPassword({ email, password });
 }
-
-console.log(error);
 </script>
-
 <template>
   <div class="login-page">
     <div class="card flex justify-content-center">

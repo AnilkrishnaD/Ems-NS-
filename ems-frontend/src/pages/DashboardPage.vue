@@ -15,7 +15,7 @@
           <li>Profile</li>
         </router-link>
         <router-link to="/login">
-          <li>Logout</li>
+          <li @click="logout">Logout</li>
         </router-link>
       </ul>
     </div>
@@ -29,23 +29,27 @@
 
 <script setup>
 import { RouterView } from "vue-router";
+import { useAuthStore } from "@/stores/auth";
+
+// stores
+const authStore = useAuthStore();
+
+function logout() {
+  authStore.logout();
+}
 </script>
 
 <style lang="scss" scoped>
 /* Override default active link styles */
-/* Override default active link styles */
 .router-link-active,
 .router-link-exact-active {
   color: #000; /* Default color for all links */
-  background-color: transparent; /* Remove background color */
+  background-color: transparent;
 }
-
-/* Style for the "Logout" item if it's a router link */
 .logout-link {
   color: #000; /* Default color for all links */
 }
 
-/* Or, if "Logout" is not a router link, apply the color directly */
 .logout-item {
   color: #000; /* Default color for all links */
 }
@@ -61,6 +65,9 @@ import { RouterView } from "vue-router";
     ul {
       list-style-type: none;
       padding: 0;
+      a {
+        text-decoration: none;
+      }
       li {
         padding: 10px;
         cursor: pointer;
@@ -79,9 +86,12 @@ import { RouterView } from "vue-router";
     flex: 1;
     background-color: #ecf0f1;
     padding: 20px;
+    overflow: auto;
     h1 {
       margin-bottom: 20px;
       color: #2c3e50; /* Text color for the heading */
+      text-align: center;
+      font-size: 32px !important;
     }
   }
 }

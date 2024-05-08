@@ -3,7 +3,7 @@ import cookie from "store";
 import { useAuthStore } from "@/stores/auth";
 
 const api = axios.create({
-  baseURL: "https://staging.coachingbeyond.in/api/v1",
+  baseURL: "http://localhost:3000",
   headers: {
     Authorization: `Bearer ${cookie.get("bearer")}`,
   },

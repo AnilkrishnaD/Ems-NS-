@@ -19,14 +19,34 @@ const router = createRouter({
 
       children: [
         {
+          path: "",
+          name: "dashboard-home",
+          component: () => import("../pages/admin/Home.vue"),
+        },
+        {
           path: "/dashboard/employees",
           name: "dashboard-employees",
           component: () => import("../pages/admin/Employees.vue"),
         },
         {
+          path: "/dashboard/add-employee",
+          name: "dashboard-add-employee",
+          component: () => import("../pages/admin/AddEmployee.vue"),
+        },
+        {
+          path: "/dashboard/edit-employee/:id",
+          name: "dashboard-edit-employee", // Change the name to match the route
+          component: () => import("../pages/admin/EditEmployee.vue"),
+        },
+        {
           path: "/dashboard/category",
           name: "dashboard-category",
           component: () => import("../pages/admin/Category.vue"),
+        },
+        {
+          path: "/dashboard/addcategory",
+          name: "dashboard-add-category",
+          component: () => import("../pages/admin/AddCategory.vue"),
         },
         {
           path: "/dashboard/profile",
@@ -45,8 +65,8 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const authStore = useAuthStore();
-  const isAuthenticated = authStore.token;
-  // const isAuthenticated = true;
+  // const isAuthenticated = authStore.token;
+  const isAuthenticated = true;
   const publicUrls = ["login"];
 
   if (!isAuthenticated && !publicUrls.includes(to.name)) {

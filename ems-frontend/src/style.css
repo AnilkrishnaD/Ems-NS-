@@ -24,3 +24,9 @@ h6 {
   color: white;
   font-weight: 700 !important;
 }
+
+.add-button {
+  background-color: green !important;
+  color: white;
+  padding: 12px;
+}
