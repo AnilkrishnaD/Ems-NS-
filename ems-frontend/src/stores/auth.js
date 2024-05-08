@@ -22,7 +22,9 @@ export const useAuthStore = defineStore("auth", {
   },
   actions: {
     // sign in methods
-    async verifyPassword({ email, password }) {
+
+    // for admin
+    async verifyPasswordForAdmin({ email, password }) {
       try {
         const response = await apiAuth.post("/auth/adminlogin", {
           email,
@@ -34,6 +36,30 @@ export const useAuthStore = defineStore("auth", {
           this.token = response.data.token;
           cookie.set("bearer", response.data.token);
           router.push("/dashboard");
+        } else {
+          this.authError = response.data.Error;
+          setTimeout(() => {
+            this.authError = null;
+          }, 3000);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    // for employee
+    async verifyPasswordForEmployee({ email, password }) {
+      try {
+        const response = await apiAuth.post("/employee/employee_login", {
+          email,
+          password,
+        });
+        // console.log(response, "response");
+
+        if (response.data.loginStatus) {
+          this.token = response.data.token;
+          cookie.set("valid", true);
+          router.push(`/empployeedetails/${result.data.id}`);
         } else {
           this.authError = response.data.Error;
           setTimeout(() => {

@@ -16,7 +16,7 @@ function login(event) {
   const email = userEmail.value;
   const password = secret.value;
 
-  authStore.verifyPassword({ email, password });
+  authStore.verifyPasswordForEmployee({ email, password });
 }
 </script>
 <template>

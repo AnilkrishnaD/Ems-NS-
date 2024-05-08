@@ -1,5 +1,6 @@
 <template>
   <div>
+    <p>{{ status }}</p>
     <template v-if="status === 'success'">
       <div class="dashboard-summary">
         <div class="summary-item">
@@ -29,23 +30,26 @@
       </div>
       <div class="admin-list">
         <h3>List of Admins</h3>
-        <table>
-          <thead>
-            <tr>
-              <th>Email</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="admin in admins" :key="admin.id">
-              <td>{{ admin.email }}</td>
-              <td>
-                <button class="btn-edit">Edit</button>
-                <button class="btn-delete">Delete</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+        <DataTable
+          :value="admins"
+          scrollable
+          scrollHeight="400px"
+          tableStyle="min-width: 50rem"
+        >
+          <Column field="email" header="Name"></Column>
+          <Column header="Actions">
+            <template #body="{ rowData }">
+              <div class="action-buttons">
+                <button @click="editAdmin(rowData)" class="edit-button">
+                  <i class="pi pi-pencil"></i>
+                </button>
+                <button @click="deleteAdmin(rowData)" class="delete-button">
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </template>
+          </Column>
+        </DataTable>
       </div>
     </template>
     <template v-else-if="status === 'loading'">
@@ -61,6 +65,11 @@
 import axios from "axios";
 import { ref, onMounted, computed } from "vue";
 
+import DataTable from "primevue/datatable";
+import Column from "primevue/column";
+import ColumnGroup from "primevue/columngroup"; // optional
+import Row from "primevue/row"; // optional
+
 import { useHomeStore } from "../../stores/Home";
 
 // stores
@@ -71,15 +80,19 @@ const employeeTotal = computed(() => homeStore.empTotal);
 const salaryTotal = computed(() => homeStore.salaryTotal);
 const admins = computed(() => homeStore.adimnRecords);
 
-const status = computed(() => homeStore.status);
+const status = computed(() => homeStore.loadingStatus);
 const error = computed(() => homeStore.error);
 
 onMounted(() => {
-  useHomeStore.fetchAdminRecors();
-  useHomeStore.fetchAdminCount();
-  useHomeStore.fetchEmployeeCount();
-  useHomeStore.fetchSalaryCount();
+  // useHomeStore.fetchAdminRecors();
+  //useHomeStore.fetchAdminCount();
+  // useHomeStore.fetchEmployeeCount();
+  // useHomeStore.fetchSalaryCount();
 });
+
+const deleteAdmin = (data) => {};
+
+const editAdmin = (data) => {};
 </script>
 
 <style scoped lang="scss">

@@ -7,11 +7,14 @@ import api from "@/plugins/api";
 
 export const useHomeStore = defineStore("home", {
   state: () => ({
-    loadingStatus: "loading",
-    adminTotal: 0,
-    empTotal: 0,
-    salaryTotal: 0,
-    adimnRecords: [],
+    loadingStatus: "success",
+    adminTotal: 3,
+    empTotal: 10,
+    salaryTotal: 30000,
+    adimnRecords: [
+      { email: "Anil", id: "1" },
+      { email: "Sai", id: 2 },
+    ],
     error: null,
   }),
   actions: {

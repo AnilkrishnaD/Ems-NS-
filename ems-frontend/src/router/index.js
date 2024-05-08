@@ -8,9 +8,19 @@ const router = createRouter({
   // which is lazy-loaded when the route is visited.
   routes: [
     {
-      path: "/login",
-      name: "login",
-      component: () => import("../pages/LoginPage.vue"),
+      path: "/start",
+      name: "start",
+      component: () => import("../pages/StartPage.vue"),
+    },
+    {
+      path: "/employeelogin",
+      name: "employee-login",
+      component: () => import("../pages/EmpLoginPage.vue"),
+    },
+    {
+      path: "/adminlogin",
+      name: "admin-login",
+      component: () => import("../pages/AdminLoginPage.vue"),
     },
     {
       path: "/dashboard",
@@ -55,10 +65,11 @@ const router = createRouter({
         },
       ],
     },
+
     {
-      path: "/",
-      name: "home",
-      component: () => import("../pages/HomePage.vue"),
+      path: "/empployeedetails/:id",
+      name: "emp-details",
+      component: () => import("../pages/EmployeeDetails.vue"),
     },
   ],
 });
@@ -70,7 +81,7 @@ router.beforeEach(async (to, from) => {
   const publicUrls = ["login"];
 
   if (!isAuthenticated && !publicUrls.includes(to.name)) {
-    return { name: "login" };
+    return { name: "start" };
   }
 });
 
