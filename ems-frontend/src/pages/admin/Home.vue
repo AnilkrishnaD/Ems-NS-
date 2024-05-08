@@ -1,105 +1,85 @@
 <template>
   <div>
-    <div class="dashboard-summary">
-      <div class="summary-item">
-        <div class="summary-title">Admin</div>
-        <hr />
-        <div class="summary-detail">
-          <span>Total:</span>
-          <span>{{ adminTotal }}</span>
+    <template v-if="status === 'success'">
+      <div class="dashboard-summary">
+        <div class="summary-item">
+          <div class="summary-title">Admin</div>
+          <hr />
+          <div class="summary-detail">
+            <span>Total:</span>
+            <span>{{ adminTotal }}</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-title">Employee</div>
+          <hr />
+          <div class="summary-detail">
+            <span>Total:</span>
+            <span>{{ employeeTotal }}</span>
+          </div>
+        </div>
+        <div class="summary-item">
+          <div class="summary-title">Salary</div>
+          <hr />
+          <div class="summary-detail">
+            <span>Total:</span>
+            <span>${{ salaryTotal }}</span>
+          </div>
         </div>
       </div>
-      <div class="summary-item">
-        <div class="summary-title">Employee</div>
-        <hr />
-        <div class="summary-detail">
-          <span>Total:</span>
-          <span>{{ employeeTotal }}</span>
-        </div>
+      <div class="admin-list">
+        <h3>List of Admins</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="admin in admins" :key="admin.id">
+              <td>{{ admin.email }}</td>
+              <td>
+                <button class="btn-edit">Edit</button>
+                <button class="btn-delete">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
-      <div class="summary-item">
-        <div class="summary-title">Salary</div>
-        <hr />
-        <div class="summary-detail">
-          <span>Total:</span>
-          <span>${{ salaryTotal }}</span>
-        </div>
-      </div>
-    </div>
-    <div class="admin-list">
-      <h3>List of Admins</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Email</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="admin in admins" :key="admin.id">
-            <td>{{ admin.email }}</td>
-            <td>
-              <button class="btn-edit">Edit</button>
-              <button class="btn-delete">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    </template>
+    <template v-else-if="status === 'loading'">
+      <div>loading</div>
+    </template>
+    <template v-else>
+      <div>something went wrong</div>
+    </template>
   </div>
 </template>
 
 <script setup>
 import axios from "axios";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 
-const adminTotal = ref(0);
-const employeeTotal = ref(0);
-const salaryTotal = ref(0);
-const admins = ref([]);
+import { useHomeStore } from "../../stores/Home";
+
+// stores
+const homeStore = useHomeStore();
+
+const adminTotal = computed(() => homeStore.adminTotal);
+const employeeTotal = computed(() => homeStore.empTotal);
+const salaryTotal = computed(() => homeStore.salaryTotal);
+const admins = computed(() => homeStore.adimnRecords);
+
+const status = computed(() => homeStore.status);
+const error = computed(() => homeStore.error);
 
 onMounted(() => {
-  adminCount();
-  employeeCount();
-  salaryCount();
-  AdminRecords();
+  useHomeStore.fetchAdminRecors();
+  useHomeStore.fetchAdminCount();
+  useHomeStore.fetchEmployeeCount();
+  useHomeStore.fetchSalaryCount();
 });
-
-const AdminRecords = () => {
-  axios.get("http://localhost:3000/auth/admin_records").then((result) => {
-    if (result.data.Status) {
-      admins.value = result.data.Result;
-    } else {
-      alert(result.data.Error);
-    }
-  });
-};
-
-const adminCount = () => {
-  axios.get("http://localhost:3000/auth/admin_count").then((result) => {
-    if (result.data.Status) {
-      adminTotal.value = result.data.Result[0].admin;
-    }
-  });
-};
-
-const employeeCount = () => {
-  axios.get("http://localhost:3000/auth/employee_count").then((result) => {
-    if (result.data.Status) {
-      employeeTotal.value = result.data.Result[0].employee;
-    }
-  });
-};
-
-const salaryCount = () => {
-  axios.get("http://localhost:3000/auth/salary_count").then((result) => {
-    if (result.data.Status) {
-      salaryTotal.value = result.data.Result[0].salaryOFEmp;
-    } else {
-      alert(result.data.Error);
-    }
-  });
-};
 </script>
 
 <style scoped lang="scss">
